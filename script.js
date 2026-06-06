@@ -317,28 +317,30 @@ function initScarcityBar() {
 
 /* ---------- Click-to-Play YouTube Player ---------- */
 function initVideoPlayer() {
-  const videoMock = document.getElementById('youtubeVideoPlayer');
-  if (!videoMock) return;
+  const videoMocks = document.querySelectorAll('.video-player-mock[data-youtube-id]');
+  if (!videoMocks.length) return;
 
-  videoMock.addEventListener('click', () => {
-    const youtubeId = videoMock.getAttribute('data-youtube-id');
-    if (!youtubeId) return;
+  videoMocks.forEach(videoMock => {
+    videoMock.addEventListener('click', () => {
+      const youtubeId = videoMock.getAttribute('data-youtube-id');
+      if (!youtubeId) return;
 
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`);
-    iframe.setAttribute('title', 'YouTube video player');
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-    iframe.setAttribute('allowfullscreen', 'true');
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
-    iframe.style.border = 'none';
-    iframe.style.borderRadius = 'var(--radius-md)';
+      const iframe = document.createElement('iframe');
+      iframe.setAttribute('src', `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`);
+      iframe.setAttribute('title', 'YouTube video player');
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.setAttribute('allowfullscreen', 'true');
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.position = 'absolute';
+      iframe.style.top = '0';
+      iframe.style.left = '0';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = 'var(--radius-md)';
 
-    videoMock.innerHTML = '';
-    videoMock.appendChild(iframe);
+      videoMock.innerHTML = '';
+      videoMock.appendChild(iframe);
+    });
   });
 }
