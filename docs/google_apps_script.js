@@ -84,15 +84,30 @@ function doPost(e) {
       }
     });
 
-    // Append new lead row
-    const newRowIndex = sheet.getLastRow() + 1;
-    sheet.appendRow(newRow);
+    // Find first empty row in Column A (skips checkbox formatting rows)
+    let targetRow = 2;
+    const lastRowVal = sheet.getLastRow();
+    if (lastRowVal > 1) {
+      const colAValues = sheet.getRange(1, 1, lastRowVal, 1).getValues();
+      for (let i = 1; i < colAValues.length; i++) {
+        if (colAValues[i][0] === "") {
+          targetRow = i + 1;
+          break;
+        }
+        if (i === colAValues.length - 1) {
+          targetRow = colAValues.length + 1;
+        }
+      }
+    }
+
+    // Write row values directly to the target empty row
+    sheet.getRange(targetRow, 1, 1, newRow.length).setValues([newRow]);
 
     // Apply checkbox data validation to the specific cell to keep UI clean
     const pvColIdx = headers.indexOf("Payment Verified") + 1;
     if (pvColIdx > 0) {
       const rule = SpreadsheetApp.newDataValidation().requireCheckbox().build();
-      sheet.getRange(newRowIndex, pvColIdx).setDataValidation(rule).setValue(false);
+      sheet.getRange(targetRow, pvColIdx).setDataValidation(rule).setValue(false);
     }
 
     // Fire Meta CAPI 'Lead' event server-side for redundant tracking
@@ -129,13 +144,13 @@ function doPost(e) {
     // Write final status to the cell
     const statusColIdx = headers.indexOf("CAPI Status") + 1;
     if (statusColIdx > 0) {
-      sheet.getRange(newRowIndex, statusColIdx).setValue(capiStatus);
+      sheet.getRange(targetRow, statusColIdx).setValue(capiStatus);
     }
 
     return ContentService.createTextOutput(JSON.stringify({
       "status": "success",
       "message": capiStatus,
-      "row": newRowIndex
+      "row": targetRow
     })).setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {
