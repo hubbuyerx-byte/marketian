@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Secure Checkout - Marketian. Learn to run, scale, and automate your Meta Ads yourself." />
+  <title>Secure Checkout | Marketian</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    // Replace 'YOUR_PIXEL_ID' with your actual Meta Pixel ID in production
+    fbq('init', '1997726010834208');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1997726010834208&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
+</head>
+<body class="checkout-page">
+
+  <!-- ========== SECURE HEADER ========== -->
+  <header class="checkout-header">
+    <div class="container checkout-header__inner">
+      <a href="index.html" class="checkout-header__logo">Marketian</a>
+      <div class="checkout-header__secure">
+        <svg class="secure-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>SSL Secure Checkout</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== CHECKOUT CONTAINER ========== -->
+  <main class="checkout-main-content">
+    <div class="container">
+      <div class="pricing-checkout-grid">
+        
+        <!-- LEFT COLUMN: COURSE OFFER & SCARCITY -->
+        <div class="checkout-offer-col">
+          <span class="launch-badge">🚀 LAUNCH PRICE — FIRST 300 STUDENTS ONLY</span>
+          <div class="checkout-price-block">
+            <span class="checkout-price-new">Rs. 2,999</span>
+            <span class="checkout-price-old">Rs. 4,999</span>
+            <span class="checkout-save-badge">SAVE 40%</span>
+          </div>
+          <p class="checkout-payment-tag">One-time payment · Lifetime access</p>
+          
+          <div class="checkout-trust-box">
+            <span class="trust-icon">💡</span>
+            <p>Rs. 2,999 for a skill set professionals charge $300–$2,000 per project for. Individual income results vary.</p>
+          </div>
+          
+          <div class="scarcity-bar-container">
+            <div class="scarcity-bar-labels">
+              <span class="students-count">297 students enrolled</span>
+              <span class="spots-left">ONLY 3 SPOTS LEFT</span>
+            </div>
+            <div class="scarcity-progress-track">
+              <div class="scarcity-progress-bar" data-target-width="99%" style="width: 0;"></div>
+            </div>
+            <p class="scarcity-warning-text">⚠️ Price jumps to Rs. 4,999 after these spots.</p>
+          </div>
+          
+          <ul class="checkout-offer-bullets">
+            <li><span class="bullet-check">✓</span> 60+ HD Video Lessons</li>
+            <li><span class="bullet-check">✓</span> 12+ Hours of Content</li>
+            <li><span class="bullet-check">✓</span> AI Tools Integration (Claude + Higgsfield)</li>
+            <li><span class="bullet-check">✓</span> Lifetime Access &amp; Monthly Updates</li>
+            <li><span class="bullet-check">✓</span> Course Completion Certificate</li>
+            <li><span class="bullet-check">✓</span> Community &amp; WhatsApp Group Access</li>
+          </ul>
+          
+          <div class="checkout-freebie-card">
+            <span class="freebie-tag">FREE</span>
+            <p><strong>Client Acquisition Ebook:</strong> Land your first paying client in 24 hours. No Upwork. No Fiverr.</p>
+          </div>
+          
+          <div class="checkout-review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Best Rs. 2,999 I've ever spent. The client outreach templates alone got me a $150 client on WhatsApp in 3 days!"</p>
+            <div class="review-author">— Zainab Malik, Lahore (Earning Verified)</div>
+          </div>
+        </div>
+        
+        <!-- RIGHT COLUMN: STEP-BY-STEP CHECKOUT WIDGET -->
+        <div class="checkout-widget-col">
+          <div class="checkout-widget-card" id="checkoutWidget">
+            
+            <!-- STEP 1 OF 2: LEAD CAPTURE FORM -->
+            <div class="checkout-step" id="checkoutStep1">
+              <h3 class="checkout-step-title">STEP 1 OF 2 — YOUR ENROLLMENT DETAILS</h3>
+              <form id="leadCaptureForm" class="checkout-form">
+                <div class="form-group">
+                  <label for="leadFullName">FULL NAME</label>
+                  <input type="text" id="leadFullName" required placeholder="e.g. Muhammad Ali" autocomplete="name" />
+                </div>
+                <div class="form-group">
+                  <label for="leadWhatsApp">WHATSAPP NUMBER</label>
+                  <input type="tel" id="leadWhatsApp" required placeholder="03XX XXXXXXX" autocomplete="tel" />
+                </div>
+                <div class="form-group">
+                  <label for="leadCity">CITY</label>
+                  <input type="text" id="leadCity" required placeholder="e.g. Lahore" autocomplete="address-level2" />
+                </div>
+                
+                <!-- ORDER BUMP BOX -->
+                <div class="order-bump-box">
+                  <label class="order-bump-label">
+                    <input type="checkbox" id="orderBumpCheckbox" class="order-bump-checkbox" />
+                    <span class="order-bump-badge">SPECIAL UPGRADE</span>
+                    <span class="order-bump-headline">Add the AI Creator's Cheat Code Vault</span>
+                  </label>
+                  <p class="order-bump-desc">Get 50+ hyper-realistic Midjourney prompts, 5 premade HD characters, client outreach scripts, and Fiverr/Upwork gig blueprints. Save 85% today!</p>
+                  <p class="order-bump-price">+ Rs. 499 (Only Rs. 3,498 Total)</p>
+                </div>
+                
+                <button type="submit" class="btn btn--purple checkout-submit-btn">
+                  🔒 <span id="submitBtnText">Reveal Payment Details — Rs. 2,999</span>
+                </button>
+              </form>
+            </div>
+            
+            <!-- STEP 2 OF 2: PAYMENT & VERIFICATION DETAILS -->
+            <div class="checkout-step hidden" id="checkoutStep2">
+              <h3 class="checkout-step-title">STEP 2 OF 2 — CHOOSE PAYMENT METHOD</h3>
+              <p class="payment-instructions">Transfer the fee to any account below, then click WhatsApp to verify your screenshot.</p>
+              
+              <div class="payment-methods-stack">
+                <!-- Meezan Bank Card -->
+                <div class="bank-details-card">
+                  <div class="bank-card-header">
+                    <span class="bank-card-name">Meezan Bank</span>
+                    <button type="button" class="btn-copy" data-copy="12030104889218">Copy No.</button>
+                  </div>
+                  <p class="bank-info-row">Account Title: <strong>Marketian Ads</strong> <button type="button" class="btn-copy-mini" data-copy="Marketian Ads">Copy Title</button></p>
+                  <p class="bank-info-row">Account No: <strong>12030104889218</strong></p>
+                  <p class="bank-info-row">IBAN: <strong class="iban-text">PK42MEZN0012030104889218</strong> <button type="button" class="btn-copy-mini" data-copy="PK42MEZN0012030104889218">Copy IBAN</button></p>
+                </div>
+                
+                <!-- EasyPaisa Card -->
+                <div class="bank-details-card">
+                  <div class="bank-card-header">
+                    <span class="bank-card-name">EasyPaisa</span>
+                    <button type="button" class="btn-copy" data-copy="03001234567">Copy No.</button>
+                  </div>
+                  <p class="bank-info-row">Account Title: <strong>Marketian Ads</strong> <button type="button" class="btn-copy-mini" data-copy="Marketian Ads">Copy Title</button></p>
+                  <p class="bank-info-row">Mobile No: <strong>03001234567</strong></p>
+                </div>
+              </div>
+              
+              <!-- WhatsApp Verify CTA -->
+              <a href="#" target="_blank" class="whatsapp-verify-btn" id="whatsappVerifyBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="whatsapp-icon"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.446L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.623-1.023-5.086-2.885-6.948C16.666 2.012 14.193.988 11.577.988c-5.45 0-9.882 4.379-9.887 9.807-.002 1.778.474 3.51 1.378 5.022L2.082 21.92l6.23-1.616c.11.06.21.12.33.18zM18.15 15.34c-.33-.16-1.961-.97-2.264-1.08-.304-.11-.524-.16-.744.16-.219.33-.852 1.08-1.042 1.3-.19.22-.38.24-.71.08-.33-.16-1.39-.51-2.65-1.63-.98-.87-1.64-1.95-1.83-2.28-.19-.33-.02-.51.15-.67.15-.15.33-.38.49-.57.16-.19.22-.33.33-.55.11-.22.05-.41-.02-.57-.08-.16-.74-1.8-1.02-2.48-.27-.66-.55-.57-.74-.58h-.63c-.22 0-.58.08-.88.41-.3.33-1.15 1.12-1.15 2.73s1.17 3.16 1.33 3.38c.16.22 2.3 3.52 5.58 4.94.78.34 1.39.54 1.86.69.78.25 1.49.21 2.05.13.62-.09 1.96-.8 2.24-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.23-.63-.39z"/></svg>
+                <span>✅ I've Transferred! Send Receipt Screenshot →</span>
+              </a>
+              
+              <!-- Direct Download Success redirection link -->
+              <div class="success-redirect-note" style="text-align: center; margin-top: 16px; font-size: 0.85rem;">
+                <span style="color: var(--color-text-muted);">Already sent the screenshot?</span><br />
+                <a href="success.html" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">Claim your FREE Bonus Ebook here →</a>
+              </div>
+            </div>
+            
+          </div>
+          
+          <!-- Widget Toast Notification -->
+          <div class="widget-toast-card" id="widgetToast">
+            <span class="toast-dot"></span>
+            <span id="widgetToastText">Zeeshan from Rawalpindi joined 6 minutes ago</span>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2026 Marketian. All rights reserved.</p>
+        <nav class="footer__links" aria-label="Footer navigation">
+          <a href="#">Terms of Use</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Refund Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="checkout.js"></script>
+</body>
+</html>

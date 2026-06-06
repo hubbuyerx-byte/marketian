@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to the Tribe! | Marketian</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    // Replace 'YOUR_PIXEL_ID' with your actual Meta Pixel ID in production
+    fbq('init', '1997726010834208');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1997726010834208&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <style>
+    .success-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 80vh;
+      padding: 60px 20px;
+    }
+    .success-icon {
+      font-size: 5rem;
+      margin-bottom: 24px;
+      line-height: 1;
+      display: inline-block;
+      animation: pop-check 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes pop-check {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .success-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .success-desc {
+      font-size: 1.15rem;
+      color: var(--color-text-muted);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .success-card {
+      background: var(--color-bg-alt);
+      border: 1px dashed var(--color-primary);
+      border-radius: var(--radius-md);
+      padding: 36px 32px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .success-card h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--color-text);
+    }
+    .success-card p {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .btn-success-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #25D366;
+      color: #fff !important;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    .btn-success-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+    }
+    .support-section {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+    .btn-success-support {
+      display: inline-block;
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-primary);
+      transition: opacity 0.2s ease;
+    }
+    .btn-success-support:hover {
+      opacity: 0.8;
+    }
+    @media (max-width: 480px) {
+      .success-title {
+        font-size: 2rem;
+      }
+      .success-desc {
+        font-size: 1rem;
+      }
+      .success-card {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body class="success-page-body">
+
+  <!-- ========== SECURE HEADER ========== -->
+  <header class="checkout-header">
+    <div class="container checkout-header__inner">
+      <a href="index.html" class="checkout-header__logo">Marketian</a>
+      <div class="checkout-header__secure">
+        <svg class="secure-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>SSL Secure System</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== SUCCESS PAGE CONTENT ========== -->
+  <main class="success-page">
+    <div class="container">
+      <div class="success-icon">✅</div>
+      <h1 class="success-title text-gradient">You're In, Marketer!</h1>
+      <p class="success-desc">Your payment details have been logged. While we verify your transfer screenshot on WhatsApp, you can download your bonus Client Acquisition Ebook right now.</p>
+      
+      <div class="success-card">
+        <h2>🎁 Claim Your First Bonus</h2>
+        <p>Get immediate access to the "Client Acquisition Ebook: Land your first paying client in 24 hours" and start generating results right away.</p>
+        <a href="https://wa.me/923001234567?text=I%20just%20paid!%20Please%20send%20my%20Ebook." target="_blank" class="btn-success-download">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; margin-right:4px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.446L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.623-1.023-5.086-2.885-6.948C16.666 2.012 14.193.988 11.577.988c-5.45 0-9.882 4.379-9.887 9.807-.002 1.778.474 3.51 1.378 5.022L2.082 21.92l6.23-1.616c.11.06.21.12.33.18zM18.15 15.34c-.33-.16-1.961-.97-2.264-1.08-.304-.11-.524-.16-.744.16-.219.33-.852 1.08-1.042 1.3-.19.22-.38.24-.71.08-.33-.16-1.39-.51-2.65-1.63-.98-.87-1.64-1.95-1.83-2.28-.19-.33-.02-.51.15-.67.15-.15.33-.38.49-.57.16-.19.22-.33.33-.55.11-.22.05-.41-.02-.57-.08-.16-.74-1.8-1.02-2.48-.27-.66-.55-.57-.74-.58h-.63c-.22 0-.58.08-.88.41-.3.33-1.15 1.12-1.15 2.73s1.17 3.16 1.33 3.38c.16.22 2.3 3.52 5.58 4.94.78.34 1.39.54 1.86.69.78.25 1.49.21 2.05.13.62-.09 1.96-.8 2.24-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.23-.63-.39z"/></svg>
+          Claim Ebook via WhatsApp
+        </a>
+      </div>
+
+      <div class="support-section">
+        <p>Check your WhatsApp for your curriculum login portal link invite shortly.</p>
+        <p>Questions? We are here to help.</p>
+        <a href="https://wa.me/923001234567" target="_blank" class="btn-success-support">Contact Support</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2026 Marketian. All rights reserved.</p>
+        <nav class="footer__links" aria-label="Footer navigation">
+          <a href="#">Terms of Use</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Refund Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
