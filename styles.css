@@ -377,6 +377,20 @@ button {
   animation: fadeInDown 0.8s ease-out 0.5s both;
 }
 
+.cta-subtext {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ea580c; /* High-contrast orange for bonuses/value stack */
+  text-align: center;
+  display: block;
+}
+
+.hero-subtext {
+  animation: fadeInDown 0.8s ease-out 0.5s both;
+  margin-bottom: 8px;
+}
+
 .hero__cta-big {
   margin-top: 24px;
   font-size: 1.1rem;
@@ -672,15 +686,23 @@ button {
 }
 
 .accordion__item {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
   overflow: hidden;
-  background: var(--color-bg);
-  transition: box-shadow var(--transition-base);
+  background: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .accordion__item:hover {
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.08), 0 4px 6px -2px rgba(59, 130, 246, 0.04);
+}
+
+.accordion__item.is-open {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 12px 24px -8px rgba(59, 130, 246, 0.12);
 }
 
 .accordion__header {
@@ -691,18 +713,22 @@ button {
   padding: 20px 24px;
   text-align: left;
   cursor: pointer;
+  background: none;
+  border: none;
   transition: background var(--transition-fast);
   gap: 16px;
+  font-family: inherit;
 }
 
 .accordion__header:hover {
-  background: var(--color-bg-alt);
+  background: rgba(59, 130, 246, 0.03);
 }
 
 .accordion__header-left {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1;
   min-width: 0;
 }
 
@@ -718,11 +744,18 @@ button {
   justify-content: center;
   font-weight: 800;
   font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.accordion__item.is-open .accordion__number {
+  background: var(--color-primary);
+  color: #ffffff;
 }
 
 .accordion__module-title {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  color: var(--color-text);
 }
 
 .accordion__header-right {
@@ -733,9 +766,9 @@ button {
 }
 
 .accordion__meta {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -748,6 +781,37 @@ button {
 
 .accordion__item.is-open .accordion__chevron {
   transform: rotate(180deg);
+  color: var(--color-primary);
+}
+
+/* Mobile responsive layout for course curriculum to prevent overlap */
+@media (max-width: 640px) {
+  .accordion__header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px !important;
+    gap: 10px !important;
+  }
+  .accordion__header-left {
+    width: 100%;
+    align-items: flex-start !important;
+  }
+  .accordion__number {
+    margin-top: 2px;
+  }
+  .accordion__module-title {
+    font-size: 0.95rem !important;
+    line-height: 1.4;
+  }
+  .accordion__header-right {
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 52px; /* Align metadata with title text: 36px number badge + 16px gap */
+    box-sizing: border-box;
+  }
+  .accordion__meta {
+    font-size: 0.75rem !important;
+  }
 }
 
 .accordion__body {
@@ -1304,13 +1368,6 @@ button {
   text-align: center;
 }
 
-.payment-methods-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
 .bank-details-card {
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
@@ -1318,6 +1375,75 @@ button {
   padding: 18px;
   text-align: left;
   position: relative;
+}
+
+/* Unified Payment Card Styling (highly compact) */
+.unified-payment-card {
+  padding: 14px 16px !important;
+  margin-bottom: 18px;
+}
+
+.unified-title-header {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unified-title-header strong {
+  color: var(--color-text);
+  font-weight: 750;
+}
+
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.payment-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.payment-row-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payment-row-name {
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.easypaisa-color {
+  color: #35B05C;
+}
+
+.jazzcash-color {
+  color: #e21b22;
+}
+
+.hbl-color {
+  color: #00A388;
+}
+
+.payment-row-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.text-monospace {
+  font-family: monospace;
+  letter-spacing: 0.5px;
 }
 
 .bank-card-header {
@@ -1927,6 +2053,16 @@ button {
   border-bottom-right-radius: 4px;
   background: #e7f8e8;
   border-color: #d1efd3;
+}
+.chat-bubble__sender {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+.chat-bubble--whatsapp .chat-bubble__sender {
+  color: #128c7e;
 }
 .chat-bubble__meta {
   font-size: 0.9rem;
@@ -2671,21 +2807,36 @@ button {
 }
 .sticky-banner__price-box {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
 }
 .sticky-banner__price-new {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 850;
-  color: #a78bfa; /* Vibrant soft purple accent */
-  text-shadow: 0 0 12px rgba(167, 139, 250, 0.25);
+  color: #ffffff; /* High-contrast crisp white */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 .sticky-banner__price-old {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.45);
   text-decoration: line-through;
   font-weight: 500;
+  white-space: nowrap;
+}
+.sticky-banner__discount {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(167, 139, 250, 0.15); /* Soft neon purple glow */
+  color: #c084fc; /* Bright neon violet */
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  white-space: nowrap;
 }
 .sticky-banner__cta {
   padding: 10px 24px;
@@ -2841,11 +2992,11 @@ button {
     padding: 20px 16px;
   }
 
-  /* Enrollment Notification Toast positioned above Sticky Bottom Banner */
+  /* Enrollment Notification Toast positioned above Sticky Bottom Banner + WhatsApp widget */
   .sales-popup {
     left: 12px;
-    right: 12px;
-    bottom: 85px; /* Above the sticky bottom banner */
+    right: 70px; /* Leave room for WhatsApp widget */
+    bottom: 140px; /* Above both sticky banner and WhatsApp widget */
     max-width: none;
     border-radius: 12px;
     padding: 12px 16px;
@@ -2855,11 +3006,14 @@ button {
   .sticky-banner {
     padding: 8px 0;
   }
+  .sticky-banner .container {
+    padding: 0 12px; /* Reclaim spacing on narrow mobile devices */
+  }
   .sticky-banner__inner {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   .sticky-banner__info {
     gap: 1px;
@@ -2868,15 +3022,24 @@ button {
     font-size: 0.65rem;
     letter-spacing: 0.05em;
   }
+  .sticky-banner__price-box {
+    gap: 6px;
+    flex-wrap: nowrap; /* Force all price tags to lay flat on one row */
+  }
   .sticky-banner__price-new {
-    font-size: 1.15rem;
+    font-size: 1.12rem;
   }
   .sticky-banner__price-old {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+  }
+  .sticky-banner__discount {
+    font-size: 0.6rem;
+    padding: 1px 4px;
   }
   .sticky-banner__cta {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    white-space: nowrap; /* Prevent button text wrapping */
   }
 }
 
@@ -2958,6 +3121,9 @@ button {
   .checkout-page .checkout-widget-card {
     padding: 20px 16px;
     border-radius: var(--radius-md);
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .checkout-page .checkout-step-title {
@@ -3042,34 +3208,51 @@ button {
 
 /* ========== PRICING SUMMARY BOX (index.html) ========== */
 .pricing-summary-box {
-  max-width: 600px;
+  max-width: 580px;
   margin: 0 auto;
-  background: var(--color-bg);
+  background: #ffffff;
   border: 2px solid #ea580c;
-  border-radius: var(--radius-lg);
-  padding: 36px 28px;
-  box-shadow: var(--shadow-lg);
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: 0 20px 40px -15px rgba(234, 88, 12, 0.12), 0 15px 25px -10px rgba(0, 0, 0, 0.04);
   text-align: left;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
+.pricing-summary-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 30px 50px -15px rgba(234, 88, 12, 0.18), 0 20px 30px -10px rgba(0, 0, 0, 0.05);
+}
+
+/* Premium ribbon indicator for centering */
 .launch-badge--centered {
-  display: block;
+  display: inline-block;
   text-align: center;
-  margin-bottom: 16px;
+  margin: 0 auto 20px;
+  width: auto;
 }
 
 .pricing-box__header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pricing-box__header .checkout-price-block {
   justify-content: center;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
 }
 
 .pricing-box__header .checkout-payment-tag {
   margin-bottom: 0;
+  font-weight: 500;
 }
 
 .pricing-box__cta {
@@ -3078,13 +3261,206 @@ button {
   display: flex;
 }
 
-.pricing-summary-box .scarcity-warning-text {
+.pricing-summary-box .countdown-warning {
   text-align: center;
+  margin-top: 6px;
 }
 
 .pricing-summary-box .cta-trust-footer {
   text-align: center;
   margin-top: 16px;
+}
+
+/* ---------- Countdown Timer ---------- */
+.countdown-container {
+  text-align: center;
+  margin: 20px 0;
+}
+.countdown-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+}
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.countdown-num {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  min-width: 52px;
+  text-align: center;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-unit-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.06em;
+}
+.countdown-sep {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-text-light);
+  margin-top: 8px;
+  line-height: 1;
+}
+.countdown-warning {
+  font-size: 0.8rem;
+  color: #ea580c;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+/* Countdown inside checkout offer column */
+.checkout-offer-col .countdown-container {
+  margin: 16px 0;
+}
+.checkout-offer-col .countdown-num {
+  font-size: 1.5rem;
+  padding: 6px 10px;
+  min-width: 44px;
+}
+.checkout-offer-col .countdown-sep {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 480px) {
+  .countdown-num {
+    font-size: 1.35rem;
+    padding: 6px 8px;
+    min-width: 42px;
+  }
+  .countdown-sep {
+    font-size: 1.1rem;
+    margin-top: 6px;
+  }
+  .countdown-unit-label {
+    font-size: 0.55rem;
+  }
+  .countdown-label {
+    font-size: 0.82rem;
+  }
+  .countdown-warning {
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile overrides for pricing summary box on index page */
+@media (max-width: 640px) {
+  .pricing-summary-box {
+    padding: 24px 16px;
+    border-radius: 20px;
+    margin-left: 12px;
+    margin-right: 12px;
+    border-width: 2px;
+  }
+  
+  .pricing-box__header {
+    margin-bottom: 20px;
+  }
+
+  .pricing-summary-box .checkout-price-block {
+    gap: 8px;
+  }
+
+  .pricing-summary-box .checkout-price-new {
+    font-size: 2.2rem;
+  }
+
+  .pricing-summary-box .checkout-price-old {
+    font-size: 1.2rem;
+  }
+
+  .pricing-summary-box .checkout-save-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .pricing-summary-box .scarcity-bar-labels {
+    font-size: 0.75rem;
+  }
+  
+  .pricing-summary-box .scarcity-warning-text {
+    font-size: 0.75rem;
+  }
+}
+
+/* ---------- Floating WhatsApp Widget ---------- */
+.whatsapp-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background-color: #25d366;
+  color: #fff !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 9999; /* Higher than sticky banner (9998) */
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  animation: wa-pulse 2.5s infinite;
+}
+.whatsapp-widget:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.55), 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #20ba5a;
+  color: #fff !important;
+}
+.whatsapp-widget svg {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+}
+@keyframes wa-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+/* Push the WhatsApp widget up when the sticky bottom banner is visible to prevent overlap */
+.sticky-banner.is-visible ~ .whatsapp-widget,
+.whatsapp-widget.whatsapp-widget--raised {
+  bottom: 84px !important; /* Clean desktop placement sitting above the banner */
+}
+
+@media (max-width: 480px) {
+  .whatsapp-widget {
+    bottom: 16px; /* Sits naturally at the bottom when banner is hidden */
+    right: 16px;
+    width: 48px;
+    height: 48px;
+  }
+  .whatsapp-widget svg {
+    width: 26px;
+    height: 26px;
+  }
+  /* On mobile, push it up to avoid the compact banner */
+  .sticky-banner.is-visible ~ .whatsapp-widget,
+  .whatsapp-widget.whatsapp-widget--raised {
+    bottom: 80px !important;
+  }
 }
 
 

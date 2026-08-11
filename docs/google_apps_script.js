@@ -1,8 +1,8 @@
 // ─── CONFIGURATION ────────────────────────────────────────────────────────────
 // Replace these with your actual Meta Pixel ID and Access Token.
 // You can generate the Access Token under Meta Events Manager > Settings > Conversions API.
-var META_PIXEL_ID     = '1997726010834208';
-var META_ACCESS_TOKEN = 'EAAVEgSnZBQVcBRqEbN8GSme8LX1VgvkE13q7EQ3ZBqIB8h2CUwzQyJZCjVIYi3AAuCQUDObKqnUWjpdHZBRZAHt5vYBfeYbMBM0yFtyCuLpSYaNkUt69ZAWicasEntvpydSRP9V6yZBbB6YZACZAWt7PJLfXYbko8ct9ckCnZAUyIQ1px657B99YeZCIjCHXsh37QZDZD';
+var META_PIXEL_ID     = '1622955485439618';
+var META_ACCESS_TOKEN = 'EAAVEgSnZBQVcBRoSoiLR0qzwZBkPHn4cfkgzHRT0TnhFZBfwpiSV7oGVBSm2I9mXCNKOYwVHUHD72eSukvWL7ZCtBUS97Tuw2d2duakEGKUsddzlzB5FNRkENF9vjtBbjZBwe1NXhlnP5rjLPE45ywo2vpUwZB8spZCClVU3opYqMkGNpuqLcWqt2hkiE2ZABgZDZD';
 // ──────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -20,7 +20,31 @@ var META_ACCESS_TOKEN = 'EAAVEgSnZBQVcBRqEbN8GSme8LX1VgvkE13q7EQ3ZBqIB8h2CUwzQyJ
 // Receives lead data from the checkout page and logs it.
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    // Smart payload parsing: handle both JSON and URL-encoded form data
+    // Browser sends form-encoded (required for no-cors), direct API sends JSON
+    // Capture client IP from Google Apps Script request headers
+    var clientIp = '';
+    try {
+      // Google Apps Script doesn't expose headers directly in doPost,
+      // but we can try to get it from the forwarded headers
+      clientIp = e.parameter ? (e.parameter.ip || '') : '';
+    } catch(ipErr) { /* ignore */ }
+
+    var data;
+    if (e.postData && e.postData.type === 'application/json') {
+      data = JSON.parse(e.postData.contents);
+    } else if (e.postData && e.postData.contents) {
+      // Try JSON first, fall back to form parameters
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch (jsonErr) {
+        // Form-encoded data comes through e.parameter
+        data = e.parameter || {};
+      }
+    } else {
+      // Pure form-encoded (no postData.contents) — use e.parameter
+      data = e.parameter || {};
+    }
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = ss.getSheetByName("Leads");
 
@@ -47,40 +71,42 @@ function doPost(e) {
 
     // Map incoming lead parameters to sheet columns
     const newRow = headers.map(function(header) {
-      const h = header.toString().trim();
-      if (h === "Payment Verified") return false;
-      if (h === "CAPI Status") return "Lead CAPI Firing...";
+      const h = header.toString().trim().toLowerCase();
+      if (h === "payment verified") return false;
+      if (h === "capi status") return "Lead CAPI Firing...";
       
       switch(h) {
-        case "Conversion Time":
+        case "conversion time":
           return data.timestamp ? new Date(data.timestamp).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }) : new Date().toLocaleString('en-PK', { timeZone: 'Asia/Karachi' });
-        case "Order ID":
+        case "order id":
           return data.orderId || "";
-        case "Name":
+        case "name":
           return data.name || "";
-        case "Phone":
+        case "phone":
           return data.whatsapp || "";
-        case "City":
+        case "city":
           return data.city || "";
-        case "Order Bump":
+        case "order bump":
           return data.orderBump || "No";
-        case "Total Price":
+        case "total price":
           return data.totalPrice || "";
         case "fbc":
           return data.fbc || "";
         case "fbp":
           return data.fbp || "";
-        case "IP":
+        case "ip":
           // Fetch IP header sent by Apps Script request or passed by client
           return data.ip || e.parameter.ip || "";
-        case "UA":
+        case "ua":
           return data.ua || "";
-        case "Google Click ID":
+        case "google click id":
           return data.gclid || "";
         case "ttclid":
           return data.ttclid || "";
         default:
-          return data[h] !== undefined ? data[h] : "";
+          // Case-insensitive direct key matching
+          const dataKey = Object.keys(data).find(key => key.toLowerCase() === h);
+          return dataKey ? data[dataKey] : "";
       }
     });
 
@@ -104,7 +130,7 @@ function doPost(e) {
     sheet.getRange(targetRow, 1, 1, newRow.length).setValues([newRow]);
 
     // Apply checkbox data validation to the specific cell to keep UI clean
-    const pvColIdx = headers.indexOf("Payment Verified") + 1;
+    const pvColIdx = findColumnIndex(headers, "Payment Verified");
     if (pvColIdx > 0) {
       const rule = SpreadsheetApp.newDataValidation().requireCheckbox().build();
       sheet.getRange(targetRow, pvColIdx).setDataValidation(rule).setValue(false);
@@ -119,13 +145,15 @@ function doPost(e) {
           phone: data.whatsapp || "",
           eventId: data.orderId || "",
           city: data.city || "",
-          value: data.totalPrice || 2999,
+          value: data.totalPrice || 1499,
           fbc: data.fbc || "",
           fbp: data.fbp || "",
-          ip: data.ip || "",
+          ip: data.ip || clientIp || "",
           ua: data.ua || "",
           url: data.url || ""
         };
+        Logger.log('Data:');
+        Logger.log(JSON.stringify(leadUser));
         const capiResp = sendEventToMeta('Lead', leadUser);
         const code = capiResp.getResponseCode();
         const body = JSON.parse(capiResp.getContentText());
@@ -142,7 +170,7 @@ function doPost(e) {
     }
 
     // Write final status to the cell
-    const statusColIdx = headers.indexOf("CAPI Status") + 1;
+    const statusColIdx = findColumnIndex(headers, "CAPI Status");
     if (statusColIdx > 0) {
       sheet.getRange(targetRow, statusColIdx).setValue(capiStatus);
     }
@@ -179,8 +207,8 @@ function onEditTrigger(e) {
 
   // Map columns from headers dynamically
   const headers      = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-  const metaBoxIdx   = headers.indexOf('Payment Verified') + 1;
-  const statusColIdx = headers.indexOf('CAPI Status') + 1;
+  const metaBoxIdx   = findColumnIndex(headers, 'Payment Verified');
+  const statusColIdx = findColumnIndex(headers, 'CAPI Status');
 
   // Only fire when the Payment Verified checkbox is ticked TRUE
   if (colIndex !== metaBoxIdx || range.getValue() !== true) return;
@@ -197,7 +225,7 @@ function onEditTrigger(e) {
     sheet.getRange(rowIndex, statusColIdx).setValue('Firing Purchase CAPI...');
   }
 
-  Logger.log('🚀 Processing verification for row: ' + rowIndex);
+  Logger.log('🚀 Processing row: ' + rowIndex);
 
   // Extract data from sheet row
   const u = {
@@ -218,6 +246,10 @@ function onEditTrigger(e) {
     range.setValue(false);
     return;
   }
+
+  // Log the data being sent to Meta (same format as Skool project)
+  Logger.log('Data:');
+  Logger.log(JSON.stringify(u));
 
   try {
     const response  = sendEventToMeta('Purchase', u);
@@ -288,7 +320,7 @@ function sendEventToMeta(eventName, u) {
       user_data:         userData,
       custom_data: {
         currency:     'PKR',
-        value:        Number(u.value) || 2999,
+        value:        Number(u.value) || 1499,
         content_name: 'Practical Meta Ads Curriculum',
         content_category: 'Online Course',
         content_type: 'product'
@@ -310,10 +342,22 @@ function sendEventToMeta(eventName, u) {
 // ─── 4. UTILITIES ─────────────────────────────────────────────────────────────
 // Get cell value dynamically by column header name
 function getVal(sheet, row, headers, name) {
-  const idx = headers.indexOf(name);
-  if (idx === -1) return '';
-  const val = sheet.getRange(row, idx + 1).getValue().toString().trim();
+  const colIdx = findColumnIndex(headers, name);
+  if (colIdx === 0) return '';
+  const val = sheet.getRange(row, colIdx).getValue().toString().trim();
   return (val === 'N/A' || val === 'undefined' || val === '0') ? '' : val;
+}
+
+// Helper function to find column index (1-based) by matching column name case-insensitively and trimmed
+function findColumnIndex(headers, name) {
+  if (!headers || !name) return 0;
+  const target = name.toString().trim().toLowerCase();
+  for (let i = 0; i < headers.length; i++) {
+    if (headers[i].toString().trim().toLowerCase() === target) {
+      return i + 1;
+    }
+  }
+  return 0;
 }
 
 // Computes SHA-256 hashes of values (lowercased and trimmed) for privacy compliance

@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initCheckout();
-  initScarcityBar();
+  initCountdownTimer();
 });
 
 /* ---------- Meta Attribution Helpers (Skool Method) ---------- */
@@ -62,6 +62,13 @@ getFbc();
 getGclid();
 getTtclid();
 
+// Capture client IP address for Meta CAPI matching (same as Skool project)
+var clientIPAddress = '';
+fetch('https://api.ipify.org?format=json')
+  .then(r => r.json())
+  .then(d => { clientIPAddress = d.ip || ''; })
+  .catch(() => { clientIPAddress = ''; });
+
 /* ---------- 2-Step Pakistani Checkout Widget Logic ---------- */
 function initCheckout() {
   const form = document.getElementById('leadCaptureForm');
@@ -73,9 +80,9 @@ function initCheckout() {
   const widgetToastText = document.getElementById('widgetToastText');
 
   // Configurable values
-  const basePrice = 2999;
+  const basePrice = 1499;
   const bumpPrice = 499;
-  const whatsappNumber = '923001234567'; // Target WhatsApp verification number (international, no +)
+  const whatsappNumber = '923255090258'; // Target WhatsApp verification number (international, no +)
   const webhookUrl = 'https://script.google.com/macros/s/AKfycbyxNAYrkC-4aDY0eB4j_by7yWazjatqR5WiZGEbqerV1Q02ZzYy9V_XacMu9NwVmhyb/exec'; // Active Google Sheets Webhook URL
 
   // Fire InitiateCheckout immediately upon entering checkout.html (deduplicated)
@@ -116,7 +123,11 @@ function initCheckout() {
       }
 
       // Clean and validate Pakistani phone number (Skool method)
-      const cleanPhone = whatsappInput.replace(/[\s\-\(\)\+]/g, "");
+      let cleanPhone = whatsappInput.replace(/[\s\-\(\)\+]/g, "");
+      // Handle international prefix 0092 -> 92
+      if (cleanPhone.startsWith('0092')) {
+        cleanPhone = cleanPhone.substring(2);
+      }
       const pkPhoneRegex = /^03\d{9}$|^923\d{9}$/;
       if (!pkPhoneRegex.test(cleanPhone)) {
         alert('Please enter a valid Pakistani WhatsApp number starting with 03 (e.g., 03001234567).');
@@ -135,8 +146,10 @@ function initCheckout() {
       const randomNum = Math.floor(1000 + Math.random() * 9000);
       const orderId = `MKT-${Date.now().toString().slice(-6)}-${randomNum}`;
 
-      // Save order ID in session storage for the WhatsApp purchase click trigger
+      // Save order details in session storage for the WhatsApp purchase click trigger & success page tracking
       sessionStorage.setItem('current_order_id', orderId);
+      sessionStorage.setItem('current_order_value', totalPrice.toString());
+      sessionStorage.removeItem('purchase_tracked'); // Reset tracked flag for new order
 
       const leadData = {
         orderId: orderId,
@@ -150,6 +163,7 @@ function initCheckout() {
         fbp: getFbp() || '',
         gclid: getGclid() || '',
         ttclid: getTtclid() || '',
+        ip: clientIPAddress || '',
         ua: navigator.userAgent || '',
         url: window.location.href || ''
       };
@@ -164,16 +178,24 @@ function initCheckout() {
       }
 
       // Asynchronously POST to webhook (non-blocking)
+      // NOTE: mode 'no-cors' + 'application/x-www-form-urlencoded' is the ONLY combo
+      // that reliably reaches Google Apps Script. JSON gets stripped by no-cors,
+      // and removing no-cors causes CORS errors on Google's 302 redirect.
       if (webhookUrl) {
+        const formBody = new URLSearchParams();
+        Object.entries(leadData).forEach(([key, value]) => {
+          formBody.append(key, String(value));
+        });
+
         fetch(webhookUrl, {
           method: 'POST',
           mode: 'no-cors',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: JSON.stringify(leadData)
+          body: formBody.toString()
         }).catch(err => {
-          console.error('Webhook POST failed (backup saved locally):', err);
+          console.error('[Webhook] POST failed (backup saved locally):', err);
         });
       } else {
         console.warn('Google Sheets Webhook URL is not configured. Lead is backed up in localStorage.');
@@ -202,7 +224,7 @@ function initCheckout() {
         });
       }
 
-      // Populate WhatsApp confirmation URL with dynamic parameters
+      // Populate WhatsApp confirmation URL with dynamic parameters & register purchase click event
       if (whatsappVerifyBtn) {
         const message = `Hi, I've transferred the fee of Rs. ${totalPrice.toLocaleString()} for the Meta Ads Course. Here are my details:
 
@@ -219,22 +241,7 @@ Please verify my payment and send my access details.`;
     });
   }
 
-  // Set up click listener on WhatsApp button for Purchase conversion tracking (Skool style)
-  if (whatsappVerifyBtn) {
-    whatsappVerifyBtn.addEventListener('click', () => {
-      const isBumped = orderBumpCheckbox ? orderBumpCheckbox.checked : false;
-      const totalPrice = isBumped ? (basePrice + bumpPrice) : basePrice;
-      const orderId = sessionStorage.getItem('current_order_id') || `man_${Date.now()}`;
 
-      trackMetaEvent('Purchase', {
-        content_name: 'Practical Meta Ads Curriculum',
-        content_category: 'Online Course',
-        value: totalPrice,
-        currency: 'PKR',
-        payment_method: 'whatsapp_screenshot'
-      }, orderId);
-    });
-  }
 
   // 3. Clipboard copy utilities
   const copyButtons = document.querySelectorAll('.btn-copy, .btn-copy-mini');
@@ -282,6 +289,7 @@ Please verify my payment and send my access details.`;
       }, 300);
     }, 8000);
   }
+
 }
 
 // Clipboard helper with modern browser + fallback textarea approach
@@ -353,15 +361,48 @@ function trackMetaEvent(eventName, customData = {}, overrideEventId = null) {
   }
 }
 
-/* ---------- Scarcity Progress Bar Animation ---------- */
-function initScarcityBar() {
-  const scarcityBar = document.querySelector('.scarcity-progress-bar');
-  if (!scarcityBar) return;
+/* ---------- Evergreen Countdown Timer (48 hours from first visit) ---------- */
+function initCountdownTimer() {
+  const timers = document.querySelectorAll('.countdown-timer');
+  if (!timers.length) return;
 
-  const targetWidth = scarcityBar.getAttribute('data-target-width') || '99%';
-  
-  // Animate the fill with a slight delay for better UX
-  setTimeout(() => {
-    scarcityBar.style.width = targetWidth;
-  }, 400);
+  const COUNTDOWN_HOURS = 48;
+  const STORAGE_KEY = 'marketian_launch_end';
+
+  // Get or create end time from localStorage
+  let endTime = localStorage.getItem(STORAGE_KEY);
+  if (!endTime || parseInt(endTime) < Date.now()) {
+    endTime = Date.now() + (COUNTDOWN_HOURS * 60 * 60 * 1000);
+    localStorage.setItem(STORAGE_KEY, String(endTime));
+  } else {
+    endTime = parseInt(endTime);
+  }
+
+  function updateTimers() {
+    const now = Date.now();
+    const diff = Math.max(0, endTime - now);
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    timers.forEach(timer => {
+      const dEl = timer.querySelector('[data-unit="days"]');
+      const hEl = timer.querySelector('[data-unit="hours"]');
+      const mEl = timer.querySelector('[data-unit="minutes"]');
+      const sEl = timer.querySelector('[data-unit="seconds"]');
+
+      if (dEl) dEl.textContent = String(days).padStart(2, '0');
+      if (hEl) hEl.textContent = String(hours).padStart(2, '0');
+      if (mEl) mEl.textContent = String(minutes).padStart(2, '0');
+      if (sEl) sEl.textContent = String(seconds).padStart(2, '0');
+    });
+
+    if (diff > 0) {
+      setTimeout(updateTimers, 1000);
+    }
+  }
+
+  updateTimers();
 }
