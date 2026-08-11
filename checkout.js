@@ -35,6 +35,21 @@ function getFbp() {
   return fbp || localStorage.getItem('meta_fbp') || null;
 }
 
+// Extract Google Analytics Client ID (_ga cookie)
+function getGaClientId() {
+  const match = document.cookie.match(/(^|;)\s*_ga=([^;]+)/);
+  if (match) {
+    // GA cookie format: GA1.1.123456789.1234567890 -> we want 123456789.1234567890
+    const parts = match[2].split('.');
+    if (parts.length >= 4) {
+      const clientId = parts[2] + '.' + parts[3];
+      localStorage.setItem('ga_client_id', clientId);
+      return clientId;
+    }
+  }
+  return localStorage.getItem('ga_client_id') || null;
+}
+
 // Extract Google Click ID (gclid)
 function getGclid() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -59,8 +74,10 @@ function getTtclid() {
 
 // Capture click identifiers on load to ensure storage
 getFbc();
+getFbp();
 getGclid();
 getTtclid();
+getGaClientId();
 
 // Capture client IP address for Meta CAPI matching (same as Skool project)
 var clientIPAddress = '';
@@ -163,6 +180,7 @@ function initCheckout() {
         fbp: getFbp() || '',
         gclid: getGclid() || '',
         ttclid: getTtclid() || '',
+        ga_client_id: getGaClientId() || '',
         ip: clientIPAddress || '',
         ua: navigator.userAgent || '',
         url: window.location.href || ''
