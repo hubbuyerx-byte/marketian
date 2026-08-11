@@ -109,6 +109,18 @@ function initCheckout() {
     value: basePrice,
     currency: 'PKR'
   });
+  if (typeof gtag === 'function') {
+    gtag('event', 'begin_checkout', {
+      currency: 'PKR',
+      value: basePrice,
+      items: [{
+        item_id: 'course_01',
+        item_name: 'Practical Meta Ads Curriculum',
+        price: basePrice,
+        quantity: 1
+      }]
+    });
+  }
 
   // 1. Listen to Order Bump checkbox state to update price display
   function updatePriceDisplay() {
@@ -227,6 +239,14 @@ function initCheckout() {
         currency: 'PKR',
         predicted_ltv: totalPrice
       }, orderId);
+
+      // GA4: Track generate_lead event
+      if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', {
+          currency: 'PKR',
+          value: totalPrice
+        });
+      }
 
       // Transition Step 1 to Step 2
       if (step1 && step2) {
